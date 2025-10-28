@@ -1,0 +1,120 @@
+{
+    "plugins": ["latex2e", "html"],
+    "filters": {
+        "comments": true
+    },
+    "rules": {
+        "preset-ja-technical-writing": {
+            "max-kanji-continuous-len": {
+                "max": 8,
+                "allow": [
+                    "九州産業大学理工学部",
+                    "九州産業大学理工学部情報科学科",
+                    "九州産業大学理工学部情報科学科下川研究室",
+                    "九州産業大学理工学部卒業論文",
+                    "九州産業大学大学院",
+                    "九州産業大学大学院情報科学研究科",
+                    "九州産業大学大学院情報科学研究科博士前期課程",
+                    "九州産業大学大学院情報科学研究科下川研究室",
+                    "九州産業大学情報科学部",
+                    "九州産業大学情報科学部卒業論文",
+                    "福岡女子大学国際文理学部"
+                ]
+            },
+            "no-invalid-control-character": true,
+            "no-unmatched-pair": true,
+            "sentence-length": {
+                "max": 100,
+                "skipUrlStringLink": true,
+                "skipEmailLink": true
+            },
+            "no-nfd": true,
+            "no-doubled-joshi": {
+                "min_interval": 1,
+                "strict": false,
+                "allow": ["も", "や", "にも"],
+                "separatorCharacters": [
+                    "．", "。"
+                ],
+                "commaCharacters": [
+                    "、", "，"
+                ]
+            },
+            "no-doubled-conjunction": true,
+            "no-doubled-conjunctive-particle-ga": true,
+            "no-dropping-the-ra": true,
+            "no-double-negative-ja": true,
+            "ja-unnatural-alphabet": true,
+            "ja-no-redundant-expression": true,
+            "ja-no-abusage": true,
+            "ja-no-successive-word": true,
+            "ja-no-weak-phrase": true,
+            "ja-no-mixed-period": {
+                "periodMark": "。",
+                "allowPeriodMarks": [],
+                "allowEmojiAtEnd": false,
+                "forceAppendPeriod": true
+            },
+            "ja-space-between-half-and-full-width": {
+                "space": "always",
+                "exceptPunctuation": true
+            },
+            "no-mix-dearu-desumasu": {
+                "preferInHeader": "である",
+                "preferInBody": "である",
+                "preferInList": "である",
+                "strict": true
+            }
+        },
+        "terminology": {
+            "defaultTerms": false,
+            "terms": [
+                "JavaScript",
+                "HTML",
+                "CSS",
+                "GitHub",
+                "LaTeX",
+                "VS Code"
+            ]
+        }
+    },
+    "overrides": [
+        {
+            "files": ["*.html"],
+            "filters": {
+                "allowlist": {
+                    "allow": [
+                        "/<!--[\\s\\S]*?-->/m",
+                        "/<p class=\"author\"[\\s\\S]*?<\\/p>/",
+                        "/<div class=\"learning-progress\"[\\s\\S]*?<\\/div>/",
+                        "/<code[\\s\\S]*?<\\/code>/",
+                        "/<pre[\\s\\S]*?<\\/pre>/"
+                    ]
+                }
+            }
+        },
+        {
+            "files": ["*.md", "*.markdown"],
+            "filters": {
+                "allowlist": {
+                    "allow": [
+                        "/```[\\s\\S]*?```/m",
+                        "/`[^`]+`/g",
+                        "/\\[[^\\]]+\\]\\([^)]+\\)/g",
+                        "/!\\[[^\\]]*\\]\\([^)]+\\)/g"
+                    ]
+                }
+            }
+        },
+        {
+            "files": ["*.tex", "*.latex"],
+            "filters": {
+                "allowlist": {
+                    "allow": [
+                        "/%[\\s\\S]*?$/m"
+                    ]
+                }
+            }
+        }
+    ]
+}

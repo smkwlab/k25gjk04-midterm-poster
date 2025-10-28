@@ -1,0 +1,53 @@
+{
+  // Compatible with texlive-ja-textlint: 2025e (TeXLive 2025)
+  "name": "LaTeX Environment",
+  "image": "ghcr.io/smkwlab/texlive-ja-textlint:2025e",
+  
+  "remoteUser": "texuser",
+  
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "textlint.nodePath": "/npm/node_modules",
+        "editor.fontFamily": "HackGen, 'BIZ UDPGothic', Meiryo, 'Hiragino Kaku Gothic ProN', 'SF Mono', Consolas, monospace",
+        "editor.fontSize": 14,
+        "editor.lineHeight": 1.6,
+        "editor.wordWrap": "on",
+        "files.autoSave": "afterDelay",
+        "files.autoSaveDelay": 1000,
+        "latex-workshop.latex.autoBuild.run": "onFileChange",
+        "latex-workshop.latex.watch.delay": 1000,
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.fontSize": 14,
+        "terminal.integrated.fontFamily": "HackGen, 'BIZ UDPGothic', Meiryo, 'Hiragino Kaku Gothic ProN', 'SF Mono', Consolas, monospace",
+        "git.enableSmartCommit": true,
+        "git.confirmSync": false,
+        "workbench.colorTheme": "Default Light+",
+        "window.zoomLevel": 0
+      },
+
+      "extensions": [
+        "james-yu.latex-workshop",
+        "texlab-org.texlab",
+        "GitHub.vscode-pull-request-github",
+        "3w36zj6.textlint",
+        "tomoki1207.pdf",
+        "streetsidesoftware.code-spell-checker",
+        "mhutchie.git-graph",
+        "MS-CEINTL.vscode-language-pack-ja",
+        "GitHub.copilot",
+        "ms-vscode.vscode-json",
+        "redhat.vscode-yaml",
+        "ms-vscode-remote.remote-containers"
+      ]
+    }
+  },
+
+  "forwardPorts": [],
+
+  "postCreateCommand": [
+    "bash",
+    "-c",
+    "echo '🎉 LaTeX環境が準備できました！'; echo ''; echo '📝 LaTeX文書のコンパイルを開始するには:'; echo '  - Ctrl+Shift+P (macOS: Cmd+Shift+P)'; echo '  - \"LaTeX Workshop: Build LaTeX project\" を選択'; echo '  - または sotsuron.tex (などの .tex ファイル) を開いて Ctrl+Alt+B (macOS: Cmd+Option+B)'; echo ''; echo '📖 詳細な使用方法は README.md を確認してください。'"
+  ]
+}
