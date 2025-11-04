@@ -1,12 +1,30 @@
 {
     "latex-workshop.latex.tools": [
         {
-            "name": "latexmk",
+            "name": "lualatex (fast - single pass)",
+            "command": "lualatex",
+            "args": [
+                "-halt-on-error",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOC%"
+            ],
+            "env": {
+                "LANG": "C",
+                "LC_ALL": "C"
+            }
+        },
+        {
+            "name": "latexmk (full)",
             "command": "latexmk",
             "args": [
                 "-outdir=%OUTDIR%",
                 "%DOC%"
-            ]
+            ],
+            "env": {
+                "LANG": "C",
+                "LC_ALL": "C"
+            }
         },
         {
             "name": "textlint",
@@ -18,9 +36,15 @@
     ],
     "latex-workshop.latex.recipes": [
         {
-            "name": "compile",
+            "name": "compile (fast - for editing)",
             "tools": [
-                "latexmk"
+                "lualatex (fast - single pass)"
+            ]
+        },
+        {
+            "name": "compile (full - for submission)",
+            "tools": [
+                "latexmk (full)"
             ]
         },
         {
