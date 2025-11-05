@@ -19,10 +19,10 @@
 \makeatletter
 
 \newcommand{\VILLAGE}{\@setfontsize\VILLAGE{45pt}{50pt}} % ブロックタイトル用 (非常に大きく)
-\newcommand{\READABLE}{\@setfontsize\READABLE{32pt}{37pt}} % 本文用 (読みやすく)
+\newcommand{\READABLE}{\@setfontsize\READABLE{43pt}{48pt}} % 本文用 (読みやすく)
 % キャプションのフォントサイズを本文と同じにする
 \renewcommand{\READABLE}{%
-    \@setfontsize\READABLE{32pt}{37pt}%
+    \@setfontsize\READABLE{43pt}{48pt}%
     \let\normalsize\READABLE
 }
 
@@ -56,37 +56,40 @@
         \begin{itemize}
             \item コンテンツの迅速かつ安定的な配信のため、コンテンツ配信サーバを地理的に分散配置する手法が広く採用されている
             \item この環境では、利用者ごとに最適なサーバへ接続を誘導する「リクエストナビゲーション」が重要となる
-            \item DNS ベースのリクエストナビゲーションでは、一般的にクライアントの IP アドレスを手掛かりに最適なコンテンツ配信サーバを選択する
-            \item 名前解決はクライアント（利用者）、フルリゾルバ（仲介）、権威 DNS サーバを用いて、ドメイン名を IP アドレスに変換する技術である。（図\the\numexpr\value{figure}+1\relax）
+            \item DNS ベースのリクエストナビゲーションでは、一般的にクライアントの IP アドレスで最適なサーバを選択する
+            \item 名前解決は、ドメイン名を IP アドレスに変換する技術
             \item DNS の仕組み上、利用できるクライアントの情報は、名前解決の問い合わせ元の IP アドレスだけである
             \item ただし、DNS の仕組み上、名前解決の問い合わせ元のIPアドレスはクライアントの IP アドレスではなく、フルリゾルバの IP アドレスである
-            \item フルリゾルバの IP アドレスを基に最適なコンテンツ配信サーバを選択している。従来は、これで適切な選択が実現できていた。
+            \item 従来は、フルリゾルバの IP アドレスを基に最適なサーバの選択を実現できていた
             \item これは「フルリゾルバはクライアントとネットワーク的に近い」という前提があったため実現されていた
-            \item この前提が成り立っているため、クライアントの IP アドレスではなく、フルリゾルバの IP アドレスを用いることで最適なサーバ選択が実現できる
+            \item この前提が成り立っているため、クライアントの IP アドレスではなく、フルリゾルバの IP アドレスを用いて最適なサーバ選択が実現できる
             \item しかし、誰でも利用可能な高速な応答を特徴とする Public DNS の登場により、リクエストナビゲーションが出来ないケースが発生するようになった
         \end{itemize}
 
         % 図を確実に中央寄せし、キャプションは画像の下で中央配置
+        %図をコメントアウト
+        \iffalse
         \begin{center}
-          \begin{minipage}{0.8\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{img/dns-resolv.png}
-            \refstepcounter{figure}
-            {\normalsize 図\thefigure\quad 名前解決の流れ}
-          \end{minipage}
-        \end{center}
-    }
-
-    \autoblock{ECS(EDNS Client Subnet)}{
+                  \begin{minipage}{0.8\linewidth}
+                    \centering
+                    \includegraphics[width=\linewidth]{img/dns-resolv.png}
+                    \refstepcounter{figure}
+                    {\normalsize 図\thefigure\quad 名前解決の流れ}
+                  \end{minipage}
+                \end{center}
+        \fi
+            }   
+        \autoblock{ECS(EDNS Client Subnet)}{
             \begin{itemize}
                     \item DNS の名前解決要求にクライアントの IP アドレスの一部（サブネット情報）を付与する技術である
-                    \item Public DNS を利用している状況でも、クライアントのサブネット情報に基づいて最適なコンテンツ配信サーバを選択できるようになる
+                    \item Public DNS を利用している状況でも、最適なコンテンツ配信サーバを選択できるようになる
             \end{itemize} 
     }
 
     \autoblock{課題}{
          \begin{itemize}
-            \item フルリゾルバは、権威 DNS サーバからの応答をキャッシュすることで名前解決の高速化を図っている
+            % 口頭説明する
+            %\item フルリゾルバは、権威 DNS サーバからの応答をキャッシュすることで名前解決の高速化を図っている
             \item ECS 対応フルリゾルバでは、キャッシュエントリ数の増加によってキャッシュ効率が低下し、メモリ使用量や名前解決時間に悪影響を及ぼす問題がある
             \item 192.0.2.0, 192.0.3.0, 192.51.100.0, 192.51.101.0 というサブネット情報を使い 4回 google.com を名前解決した時、キャッシュエントリ数がフルリゾルバの設定によって増加する例（表\the\numexpr\value{table}+1\relax）
          \end{itemize}
@@ -99,15 +102,16 @@
             \end{minipage}
         \end{center}
     }
-    
+
     \autoblock{研究目的}{
         \begin{itemize}
             \item ECS 対応フルリゾルバのメモリ使用量と名前解決時間に与える影響がどのくらいかを調査する
-            \item 影響を軽減するための解決策を提案し、その効果を評価する
+            \item 課題の解決策を提案し、その効果を評価する
         \end{itemize}
     }
 
     \column{0.5} % 右カラム（幅50%）
+
     \autoblock{影響の調査}{
         % 子セクション番号（各ブロックごとにリセット）
         \newcounter{subsec}[blocknum]
@@ -123,14 +127,10 @@
 
         \subsec{環境}
         \begin{itemize}
-            \item 調査のために ECS 対応フルリゾルバを構築し、クライアントはから調査用フルリゾルバに名前解決を要求する（図\the\numexpr\value{figure}+1\relax）
-            \item クライアントは /32 のサブネット情報を付与して名前解決する。
+            \item ECS 対応フルリゾルバを構築し、クライアントはから調査用フルリゾルバに名前解決を要求する（図\the\numexpr\value{figure}+1\relax）
             \item 調査用フルリゾルバは受け取った /32 を、フルリゾルバ別に設定したサブネット情報の長さ（/16, /22, /24）に丸めて名前解決をする
-            \item 比較用として ECS 無しのフルリゾルバも用意する
-            \item サブネット情報の長さによって名前解決時間・メモリ使用量に与える影響を比較する
             \item 5,000件の実在するドメイン名と8種類のサブネット情報を組み合わせて名前解決する
             \item サブネット情報は連続サブネットとランダムサブネットの2パターンで実施して違いを比較する
-            \item 実験を5回繰り返し、平均値を算出する
         \end{itemize}
         \begin{center}
             \begin{minipage}{0.6\linewidth}
@@ -143,43 +143,40 @@
 
         \subsec{調査結果}
         \begin{itemize}
-            \item 図\the\numexpr\value{figure}+1\relax および 図\the\numexpr\value{figure}+2\relax に示すとおり、丸めるサブネット情報が短い（/16）ほどメモリ使用量は小さく、長い（/24）ほど大きい傾向。
-            \item 連続サブネット（図\the\numexpr\value{figure}+1\relax）はサブネット情報の長さによってメモリ使用量は異なる。対して、ランダムサブネット（図\the\numexpr\value{figure}+2\relax）は ECS無し, ECS/22 と ECS /16, /24で二極化した。
-            \item 図\the\numexpr\value{figure}+3\relax の平均名前解決時間は、どちらも /22が最も長く、ECS を利用するフルリゾルバは ECS 無しと比べて40ミリ秒程度名前解決時間が増加している。
+            \item 図\the\numexpr\value{figure}+1\relax および 図\the\numexpr\value{figure}+2\relax はメモリ使用量推移である。丸めるサブネット情報が短い（/16）ほどメモリ使用量は小さく、長い（/24）ほど大きい傾向。
+            \item 連続サブネット（図\the\numexpr\value{figure}+1\relax）とランダムサブネット（図\the\numexpr\value{figure}+2\relax）で遷移の特徴が異なる結果となった。
+            \item 図\the\numexpr\value{figure}+3\relax の平均名前解決時間は、ECS を利用するフルリゾルバは ECS 無しと比べて40ミリ秒程度名前解決時間が増加している。
         \end{itemize}
         \begin{center}
             \begin{minipage}{0.48\linewidth}
                 \centering
                 \includegraphics[width=\linewidth]{img/renzoku-subnet-graph.png}
                 \refstepcounter{figure}
-                {\normalsize 図\thefigure\quad 連続サブネットのメモリ遷移}
+                {\normalsize 図\thefigure\quad 連続サブネット}
             \end{minipage}\hfill
             \begin{minipage}{0.48\linewidth}
                 \centering
                 \includegraphics[width=\linewidth]{img/random-subnet-graph.png}
                 \refstepcounter{figure}
-                {\normalsize 図\thefigure\quad ランダムサブネットのメモリ遷移}
+                {\normalsize 図\thefigure\quad ランダムサブネット}
             \end{minipage}
         \end{center}
         \begin{center}
-            \begin{minipage}{0.75\linewidth}
+            \begin{minipage}{0.6\linewidth}
                 \centering
                 \includegraphics[width=\linewidth]{img/resolv-time-avg.png}
                 \refstepcounter{figure}
-                {\normalsize 図\thefigure\quad 平均名前解決時間(ms)}
+                {\normalsize 図\thefigure\quad 平均名前解決時間}
             \end{minipage}
         \end{center}
 
     }   
     \autoblock{今後の展望}{
         \begin{itemize}
-            \item 他のフルリゾルバでも調査を行う
-            \begin{itemize}
-                \item 今回フルリゾルバのソフトウェアは Unbound を使用したので、 PowerDNS Recursor を使って同じ環境で実験する
-            \end{itemize}
+            \item 今回フルリゾルバのソフトウェアは Unbound を使用した。 PowerDNS Recursor でも実験する
             \item 調査結果を踏まえ、メモリ使用量と名前解決時間を軽減するための解決策を提案し、その効果を評価する
             \begin{itemize}
-                \item ECS 有効ドメインと無効ドメインを判別して複数フルリゾルバで処理する方法を今後実験する予定である
+                \item ECS 有効ドメインと無効ドメインを判別して名前解決する方法を今後実験する予定である
             \end{itemize}
         \end{itemize}
     }
